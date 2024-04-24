@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>GaussianTalker</title>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ku-cvlab.github.io/GaussianTalker/">
+    <meta property="og:title" content="GaussianTalker:  Real-Time High-Fidelity Talking Head Synthesis with Audio-Driven 3D Gaussian Splatting">
+    <meta property="og:description" content="">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/codemirror.min.css">
+    <link rel="stylesheet" href="css/app.css">
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/codemirror.min.js"></script>
+    <script src="js/clipboard.min.js"></script>
+    <script src="js/video_comparison.js"></script>
+    <script src="js/app.js"></script>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QVFM103BVF"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-QVFM103BVF');
+</script>
+
+<!-- Image Comparison Slider -->
+<!-- https://github.com/sneas/img-comparison-slider -->
+<script defer src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/index.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/styles.css" />
+
+<body>
+    <div style="margin-left:5%; margin-right:5%">
+    <div class="container" id="header" style="text-align: center; margin: auto;">
+        <div class="row" id="title-row" style="max-width: 100%; margin: 5 auto; display: inline-block">
+            <h1 class="col-md-12 text-center" style="margin-top: 60px; font-size: 34px;" id="title">
+                GaussianTalker: Real-Time High-Fidelity Talking Head Synthesis <br>with Audio-Driven 3D Gaussian Splatting<br>
+                <!-- <small>
+                    Arxiv 2024
+                </small> -->
+            </h1>
+        </div>
+        <div class="row" id="author-row" style="margin:0 auto;">
+            <div class="col-md-12 text-center" style="display: table; margin:0 auto;">
+                <a style="text-decoration:none" href="https://github.com/kyustorm7">
+                    Kyusun&nbsp;Cho<sup>1</sup>
+                </a>
+                <span style="padding-left: 20px;"></span>
+                <a style="text-decoration:none" href="https://github.com/joungbinlee">
+                    Joungbin&nbsp;Lee<sup>1</sup>
+                </a>
+                <span style="padding-left: 20px;"></span>
+                <a style="text-decoration:none" href="https://github.com/yoon-heez">
+                    Heeji&nbsp;Yoon<sup>1</sup>
+                </a>
+                <br>
+                <span style="padding-left: 20px;"></span>
+                <a style="text-decoration:none" href="https://github.com/yeobinhong">
+                    Yeobin&nbsp;Hong<sup>1</sup>
+                </a>
+                <span style="padding-left: 20px;"></span>
+                <a style="text-decoration:none" href="https://github.com/mlnyang">
+                    Jaehoon&nbsp;Ko<sup>1</sup>
+                </a>
+                <span style="padding-left: 20px;"></span>
+                <a style="text-decoration:none">
+                    Sangjun&nbsp;Ahn<sup>2</sup>
+                </a>
+                <span style="padding-left: 20px;"></span>
+                <a style="text-decoration:none" href="https://cvlab.korea.ac.kr">
+                    Seungryong&nbsp;Kim<sup>1</sup>
+                </a>
+
+                <table class="author-table" id="author-table">
+                    <tr>
+                        <td>
+    <br>
+                            <img src="./imgs/icons/Korea_University.png" width="15px">&nbsp;
+                            Korea University<sup>1</sup>
+                            <span style="padding-left: 20px;"></span>
+                            <img src="./imgs/icons/NC.png" width="25px">&nbsp;
+                            NCSOFT<sup>2</sup>
+                        </td>
+                    </tr>
+                    
+                </table>
+                
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('author-row').style.maxWidth = document.getElementById("-row").clientWidth + 'px';
+    </script>
+
+    <div class="container" id="main">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3 text-center">
+                <ul class="nav nav-pills nav-justified">
+                    <li>
+                        <a href="https://arxiv.org/abs/2403.20153">
+                            <img src="./imgs/icons/Paper1.png" height="60px">
+                            <h4><strong>Paper</strong></h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://youtu.be/yW9No1LDetg" target="_blank">
+                            <image src="./imgs/icons/video.png" height="60px">
+                                <h4><strong>Video</strong></h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/KU-CVLAB/gaussiantalker" target="_blank">
+                            <image src="./imgs/icons/github.png" height="60px">
+                                <h4><strong>Code</strong></h4>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="text-center col-md-offset-0">
+            <h2>
+                Abstract
+            </h2>
+            </div>
+            <div style="text-align:justify;  margin-left:10%; margin-right:10%">
+                This paper proposes GaussianTalker, a novel framework for real-time generation of pose-controllable talking heads. It leverages the fast rendering capabilities of 3D Gaussian Splatting (3DGS) while addressing the challenges of directly controlling 3DGS with speech audio. GaussianTalker constructs a single 3DGS representation of the head and deforms it in sync with the audio. A key insight is to encode the 3D Gaussian attributes into a shared implicit feature representation, where it is merged with audio features to manipulate each Gaussian attribute. This design exploits the spatial information of the head and enforces interactions between neighboring points. The feature embeddings are then fed to a spatial-audio attention module, which predicts frame-wise offsets for the attributes of each Gaussian. This method is more stable than previous concatenation or multiplication approaches for manipulating the numerous Gaussians and their intricate parameters. Overall, GaussianTalker offers a promising approach for real-time generation of high-quality pose-controllable talking heads.
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="text-center col-md-offset-0">
+                <h2 style="margin-top: 60px; margin-bottom: 30px;">
+                    Overall Framework
+                </h2>
+                <img src="imgs/main_figure.jpg" style="width: 75%;" width="100%">
+                <div style="text-align:justify;  margin-left:10%; margin-right:10%">
+                     GaussianTalker utilizes a multi-resolution triplane to leverage different
+                    scales of features depicting a canonical 3D head. These features are fed into a spatial-audio attention module along with the
+                    audio feature to predict per-frame deformations, enabling fast and reliable talking head synthesis.
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="container"> -->
+            <div class="row">
+                <div class="text-center col-md-offset-0">
+                    <h2 style="margin-top: 60px; margin-bottom: 30px;">
+                        Comparison with Baseline Models
+                    </h2>
+                    <img src="imgs/Teaser.jpg" style="width: 55%;" width="100%">
+                    <div style="text-align:justify;  margin-left:10%; margin-right:10%">
+                        Fidelity and inference time comparison between existing 3D talking face synthesis models and our GaussianTalker. GaussianTalker achieves on par with or better results at much higher FPS. Note that we also include GaussianTalker*, a more efficient and faster variant. Size of each bubble represents the inference time of each method.
+                    </div>
+                </div>
+            </div>
+        <!-- </div> -->
+
+
+            <div class="row">
+                <br><br>
+                <div class="text-center col-md-offset-0">
+                    <h2>
+                        Guided Diffusion Results
+                    </h2>
+                    <p>← Hover over the image to compare results! (baseline vs ours)→</p>
+                </div>
+                <!-- <div class="text-center col-md-offset-0" style="margin-left: 10px;"> -->
+                <!-- <div class="text-center col-md-offset-0">
+                    <strong>
+                        <h3>Unconditional Generation</h3>
+                    </strong>
+                    <img-comparison-slider style="width: 49%;" hover="hover">
+                        <img slot="first" src="imgs/baseline/adm_uncond_baseline.png" width="100%" />
+                        <img slot="second" src="imgs/ours/adm_uncond_ours.png" width="100%" />
+                    </img-comparison-slider>
+                    <strong>
+                        <h3>Conditional Generation</h3>
+                    </strong>
+                    <img-comparison-slider style="width: 49%;" hover="hover" hover="hover">
+                        <img slot="first" src="imgs/baseline/adm_cond_baseline0.png" width="100%" />
+                        <img slot="second" src="imgs/ours/adm_cond_ours0.png" width="100%" />
+                    </img-comparison-slider> -->
+                <div class="col-md-6 text-center">
+                    <strong>
+                        <h3>Unconditional Generation</h3>
+                    </strong>
+                </div>
+                <div class="col-md-6 text-center">
+                    <strong>
+                        <h3>Conditional Generation</h3>
+                    </strong>
+                </div>
+                <img-comparison-slider style="width: 49%;" hover="hover" value="66">
+                    <img slot="first" src="imgs/baseline/adm_uncond_baseline.jpg" width="100%" />
+                    <img slot="second" src="imgs/ours/adm_uncond_ours.jpg" width="100%" />
+                </img-comparison-slider>
+                <img-comparison-slider style="width: 49%;" hover="hover">
+                    <img slot="first" src="imgs/baseline/adm_cond_baseline0.jpg" width="100%" />
+                    <img slot="second" src="imgs/ours/adm_cond_ours0.jpg" width="100%" />
+                </img-comparison-slider>
+            </div>
+
+
+            <div class="row">
+                <div class="text-center col-md-offset-0">
+                    <h2>
+                        Stable Diffusion Results
+                    </h2>
+                </div>
+                <div class="text-center col-md-offset-0">
+                    <strong>
+                        <h3>Unconditional Generation</h3>
+                    </strong>
+                    <img-comparison-slider style="width: 49%;" hover="hover" value="66">
+                        <img slot="first" src="imgs/baseline/sd_uncond_baseline_quarter.jpg" width="100%" />
+                        <img slot="second" src="imgs/ours/sd_uncond_ours_quarter.jpg" width="100%" />
+                    </img-comparison-slider>
+                    <strong>
+                        <h3>Conditional Generation (CFG vs CFG + Ours)</h3>
+                    </strong>
+                    <img-comparison-slider style="width: 75%;" hover="hover" value="66">
+                        <img slot="first" src="imgs/baseline/sd_cfg.jpg" width="100%" />
+                        <img slot="second" src="imgs/ours/sd_cfg_ours.jpg" width="100%" />
+                    </img-comparison-slider>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="text-center col-md-offset-0">
+                    <h2 style="margin-top: 45px; margin-bottom: 20px;">
+                        Application to Downstream Tasks
+                    </h2>
+
+                    <strong>
+                        <h3>Image Restoration (<a
+                                href="https://github.com/LituRout/PSLD/tree/main?tab=readme-ov-file">PSLD</a>)
+                        </h3>
+                    </strong>
+                    <img src="imgs/applications/psld_quarter_calibri.jpg" style="width: 75%;" width="100%">
+                    <strong>
+                        <h3>ControlNet with Empty Prompt (<a href="https://arxiv.org/abs/2302.05543">ControlNet</a>)
+                        </h3>
+                    </strong>
+                    <img src="imgs/applications/controlnet_quarter.jpg" style="width: 75%; padding-right: 3%;" width="100%">
+                </div>
+            </div>
+
+            <div class="row">
+                <div style="text-align: left;">
+                    <div class="col-md-offset-0">
+                        <h3>
+                            Citation
+                        </h3>
+                        If you find our work useful in your research, please cite our work as: 
+                        <div class="form-group col-md-0">
+                            <pre>
+    @misc{ko2024talk3d,
+        title={Talk3D: High-Fidelity Talking Portrait Synthesis via Personalized 3D Generative Prior}, 
+        author={Jaehoon Ko and Kyusun Cho and Joungbin Lee and Heeji Yoon and Sangmin Lee and Sangjun Ahn and Seungryong Kim},
+        year={2024},
+        eprint={2403.20153},
+        archivePrefix={arXiv},
+        primaryClass={cs.CV}
+    }</pre>
+                        </div>
+                    </div>
+                </div>
+    
+                    <div class="row">
+                        <div class="col-md-offset-0">
+                            <h3>
+                                <div style="text-align: left;">Acknowledgements</div>
+                            </h3>
+                            <p class="text-justify">
+                                The website template was borrowed from <a href="http://mgharbi.com/">Michaël Gharbi</a>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </body>
+    
+    </html>
+    
