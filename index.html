@@ -15,7 +15,7 @@
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://ku-cvlab.github.io/GaussianTalker/">
-    <meta property="og:title" content="GaussianTalker:  Real-Time High-Fidelity Talking Head Synthesis with Audio-Driven 3D Gaussian Splatting">
+    <meta property="og:title" content="GaussianTalker: Real-Time High-Fidelity Talking Head Synthesis with Audio-Driven 3D Gaussian Splatting">
     <meta property="og:description" content="">
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -114,8 +114,8 @@
             <div class="col-sm-6 col-sm-offset-3 text-center">
                 <ul class="nav nav-pills nav-justified">
                     <li>
-                        <a href="https://arxiv.org/abs/2403.20153">
-                            <img src="./imgs/icons/Paper1.png" height="60px">
+                        <a href="https://github.com/KU-CVLAB/gaussiantalker">
+                            <img src="./imgs/icons/Paper1.jpg" height="60px">
                             <h4><strong>Paper</strong></h4>
                         </a>
                     </li>
@@ -143,7 +143,23 @@
             </h2>
             </div>
             <div style="text-align:justify;  margin-left:10%; margin-right:10%">
-                This paper proposes GaussianTalker, a novel framework for real-time generation of pose-controllable talking heads. It leverages the fast rendering capabilities of 3D Gaussian Splatting (3DGS) while addressing the challenges of directly controlling 3DGS with speech audio. GaussianTalker constructs a single 3DGS representation of the head and deforms it in sync with the audio. A key insight is to encode the 3D Gaussian attributes into a shared implicit feature representation, where it is merged with audio features to manipulate each Gaussian attribute. This design exploits the spatial information of the head and enforces interactions between neighboring points. The feature embeddings are then fed to a spatial-audio attention module, which predicts frame-wise offsets for the attributes of each Gaussian. This method is more stable than previous concatenation or multiplication approaches for manipulating the numerous Gaussians and their intricate parameters. Overall, GaussianTalker offers a promising approach for real-time generation of high-quality pose-controllable talking heads.
+                We propose GaussianTalker, a novel framework for real-time generation of
+                pose-controllable talking heads. It leverages the fast rendering capabilities
+                of 3D Gaussian Splatting (3DGS) while addressing the challenges of directly
+                controlling 3DGS with speech audio. GaussianTalker constructs a canonical 3DGS
+                representation of the head and deforms it in sync with the audio. A key insight
+                is to encode the 3D Gaussian attributes into a shared implicit feature
+                representation, where it is merged with audio features to manipulate each
+                Gaussian attribute. This design exploits the spatial-aware features and
+                enforces interactions between neighboring points. The feature embeddings are
+                then fed to a spatial-audio attention module, which predicts frame-wise offsets
+                for the attributes of each Gaussian. It is more stable than previous
+                concatenation or multiplication approaches for manipulating the numerous
+                Gaussians and their intricate parameters. Experimental results showcase
+                GaussianTalker's superiority in facial fidelity, lip synchronization accuracy,
+                and rendering speed compared to previous methods. Specifically, GaussianTalker
+                achieves a remarkable rendering speed of 120 FPS, surpassing previous
+                benchmarks.
             </div>
         </div>
 
@@ -175,100 +191,84 @@
             </div>
         <!-- </div> -->
 
-
-            <div class="row">
-                <br><br>
-                <div class="text-center col-md-offset-0">
-                    <h2>
-                        Guided Diffusion Results
-                    </h2>
-                    <p>← Hover over the image to compare results! (baseline vs ours)→</p>
-                </div>
-                <!-- <div class="text-center col-md-offset-0" style="margin-left: 10px;"> -->
-                <!-- <div class="text-center col-md-offset-0">
-                    <strong>
-                        <h3>Unconditional Generation</h3>
-                    </strong>
-                    <img-comparison-slider style="width: 49%;" hover="hover">
-                        <img slot="first" src="imgs/baseline/adm_uncond_baseline.png" width="100%" />
-                        <img slot="second" src="imgs/ours/adm_uncond_ours.png" width="100%" />
-                    </img-comparison-slider>
-                    <strong>
-                        <h3>Conditional Generation</h3>
-                    </strong>
-                    <img-comparison-slider style="width: 49%;" hover="hover" hover="hover">
-                        <img slot="first" src="imgs/baseline/adm_cond_baseline0.png" width="100%" />
-                        <img slot="second" src="imgs/ours/adm_cond_ours0.png" width="100%" />
-                    </img-comparison-slider> -->
-                <div class="col-md-6 text-center">
-                    <strong>
-                        <h3>Unconditional Generation</h3>
-                    </strong>
-                </div>
-                <div class="col-md-6 text-center">
-                    <strong>
-                        <h3>Conditional Generation</h3>
-                    </strong>
-                </div>
-                <img-comparison-slider style="width: 49%;" hover="hover" value="66">
-                    <img slot="first" src="imgs/baseline/adm_uncond_baseline.jpg" width="100%" />
-                    <img slot="second" src="imgs/ours/adm_uncond_ours.jpg" width="100%" />
-                </img-comparison-slider>
-                <img-comparison-slider style="width: 49%;" hover="hover">
-                    <img slot="first" src="imgs/baseline/adm_cond_baseline0.jpg" width="100%" />
-                    <img slot="second" src="imgs/ours/adm_cond_ours0.jpg" width="100%" />
-                </img-comparison-slider>
+        <div class="row">
+            <div class="text-center col-md-offset-0">
+                <h2>
+                    Qualitative Experiments
+                </h2>
             </div>
-
-
-            <div class="row">
-                <div class="text-center col-md-offset-0">
-                    <h2>
-                        Stable Diffusion Results
-                    </h2>
-                </div>
-                <div class="text-center col-md-offset-0">
-                    <strong>
-                        <h3>Unconditional Generation</h3>
-                    </strong>
-                    <img-comparison-slider style="width: 49%;" hover="hover" value="66">
-                        <img slot="first" src="imgs/baseline/sd_uncond_baseline_quarter.jpg" width="100%" />
-                        <img slot="second" src="imgs/ours/sd_uncond_ours_quarter.jpg" width="100%" />
-                    </img-comparison-slider>
-                    <strong>
-                        <h3>Conditional Generation (CFG vs CFG + Ours)</h3>
-                    </strong>
-                    <img-comparison-slider style="width: 75%;" hover="hover" value="66">
-                        <img slot="first" src="imgs/baseline/sd_cfg.jpg" width="100%" />
-                        <img slot="second" src="imgs/ours/sd_cfg_ours.jpg" width="100%" />
-                    </img-comparison-slider>
-                </div>
+            <div class="text-center col-md-offset-0">
+                <strong>
+                    <h3>Self-Driven Results</h3>
+                </strong>
+                <video width="840" controls>
+                    <source src="video/Self-Driven2.mp4" type="video/mp4">
+                    <!-- Your browser does not support the video tag. -->
+                </video>
+                <strong>
+                    <h3>Cross-Driven Results</h3>
+                </strong>
+                <video width="840" controls>
+                    <source src="video/Cross-Driven.mp4" type="video/mp4">
+                    <!-- Your browser does not support the video tag. -->
+                </video>
             </div>
+        </div>
 
 
+        <div class="row">
+            <div class="text-center col-md-offset-0">
+                <h2>
+                    Qualitative Experiments
+                </h2>
+            </div>
+            <div class="text-center col-md-offset-0">
+                <strong>
+                    <h3>Self-Driven Results</h3>
+                </strong>
+                <img src="imgs/quan/self-driven.png" style="width: 70%;" width="100%">
+                <strong>
+                    <h3>Cross-Driven Results</h3>
+                </strong>
+                <img src="imgs/quan/cross-driven.png" style="width: 45%;" width="100%">
+            </div>
+        </div>
 
-            <div class="row">
-                <div class="text-center col-md-offset-0">
-                    <h2 style="margin-top: 45px; margin-bottom: 20px;">
-                        Application to Downstream Tasks
-                    </h2>
-
-                    <strong>
-                        <h3>Image Restoration (<a
-                                href="https://github.com/LituRout/PSLD/tree/main?tab=readme-ov-file">PSLD</a>)
-                        </h3>
-                    </strong>
-                    <img src="imgs/applications/psld_quarter_calibri.jpg" style="width: 75%;" width="100%">
-                    <strong>
-                        <h3>ControlNet with Empty Prompt (<a href="https://arxiv.org/abs/2302.05543">ControlNet</a>)
-                        </h3>
-                    </strong>
-                    <img src="imgs/applications/controlnet_quarter.jpg" style="width: 75%; padding-right: 3%;" width="100%">
+        <div class="row">
+            <div class="text-center col-md-offset-0">
+                <h2>
+                    Importance of our Spatial-Audio Attention Module
+                </h2>
+            </div>
+            <div class="text-center col-md-offset-0">
+                <strong>
+                    <h3>Speech-related Motion Disentanglement</h3>
+                </strong>
+                <video width="840" controls>
+                    <source src="video/Attention-Viz.mp4" type="video/mp4">
+                    <!-- Your browser does not support the video tag. -->
+                </video>
+                <div style="text-align:justify;  margin-left:10%; margin-right:10%">
+                    Our spatial-audio attention module effectively disentangles the speech-related motion, by conditioning the unrelated facial motion and scene variations on ohter input conditions. 
+                    We thereby disentangle the speech-related motion from the video, allowing the model to better model the correspondence between the input speech audio and corresponding facial motion.
+                </div>
+                <strong>
+                    <h3>Stabilization of Scene Variations</h3>
+                </strong>
+                <video width="840" controls>
+                    <source src="video/Effect_of_Hair.mp4" type="video/mp4">
+                    <!-- Your browser does not support the video tag. -->
+                </video>
+                <div style="text-align:justify;  margin-left:10%; margin-right:10%">
+                    By conditioning the spatial-audio attention module on the facail viewpoint, we effectively control the scene variations that do not correlate with the speech audio, such as hair motion and skin illumination for certain angles. 
                 </div>
             </div>
+        </div>
+
+
 
             <div class="row">
-                <div style="text-align: left;">
+             <div style="text-align: left;">
                     <div class="col-md-offset-0">
                         <h3>
                             Citation
@@ -276,17 +276,17 @@
                         If you find our work useful in your research, please cite our work as: 
                         <div class="form-group col-md-0">
                             <pre>
-    @misc{ko2024talk3d,
-        title={Talk3D: High-Fidelity Talking Portrait Synthesis via Personalized 3D Generative Prior}, 
-        author={Jaehoon Ko and Kyusun Cho and Joungbin Lee and Heeji Yoon and Sangmin Lee and Sangjun Ahn and Seungryong Kim},
+    @misc{cho2024gaussiantalker,
+        title={GaussianTalker: Real-Time High-Fidelity Talking Head Synthesis with Audio-Driven 3D Gaussian Splatting}, 
+        author={Kyusun Cho and Joungbin Lee and Heeji Yoon and Yeobin Hong and Jaehoon Ko and Sangjun Ahn and Seungryong Kim},
         year={2024},
-        eprint={2403.20153},
+        eprint={xxxx.xxxxx},
         archivePrefix={arXiv},
         primaryClass={cs.CV}
     }</pre>
                         </div>
                     </div>
-                </div>
+                </div> 
     
                     <div class="row">
                         <div class="col-md-offset-0">
