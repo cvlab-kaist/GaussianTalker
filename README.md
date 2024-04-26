@@ -1,5 +1,5 @@
 # GaussianTalker: Real-Time High-Fidelity Talking Head Synthesis with Audio-Driven 3D Gaussian Splatting
-<a href="https://arxiv.org/abs/2404.16012"><img src="https://img.shields.io/badge/arXiv-2404.16012-%23B31B1B"></a>
+<a href="https://arxiv.org/abs/2404.16012v2"><img src="https://img.shields.io/badge/arXiv-2404.16012-%23B31B1B"></a>
 <a href="https://ku-cvlab.github.io/GaussianTalker"><img src="https://img.shields.io/badge/Project%20Page-online-brightgreen"></a>
 <br>
 
@@ -11,7 +11,7 @@ This is our official implementation of the paper
 ![image](./docs/structure.png)
 <!-- <br> -->
 
-For more information, please check out our [Paper](https://arxiv.org/abs/2404.16012) and our [Project page](https://ku-cvlab.github.io/GaussianTalker/).
+For more information, please check out our [Paper](https://arxiv.org/abs/2404.16012v2) and our [Project page](https://ku-cvlab.github.io/GaussianTalker/).
 
 ## Installation
 We implemented & tested **GaussianTalker** with NVIDIA RTX 3090 and A6000 GPU.
