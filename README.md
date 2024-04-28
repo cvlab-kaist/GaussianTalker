@@ -1,5 +1,5 @@
 # GaussianTalker: Real-Time High-Fidelity Talking Head Synthesis with Audio-Driven 3D Gaussian Splatting
-<a href="https://arxiv.org/abs/2404.16012v2"><img src="https://img.shields.io/badge/arXiv-2404.16012-%23B31B1B"></a>
+<a href="https://arxiv.org/abs/2404.16012v2"><img src="https://img.shields.io/badge/arXiv-2404.16012v2-%23B31B1B"></a>
 <a href="https://ku-cvlab.github.io/GaussianTalker"><img src="https://img.shields.io/badge/Project%20Page-online-brightgreen"></a>
 <br>
 
@@ -27,6 +27,9 @@ conda activate GaussianTalker
 pip install -r requirements.txt
 pip install -e submodules/custom-bg-depth-diff-gaussian-rasterization
 pip install -e submodules/simple-knn
+pip install "git+https://github.com/facebookresearch/pytorch3d.git"
+pip install tensorflow-gpu==2.8.0
+pip install --upgrade "protobuf<=3.20.1"
 ```
 
 
@@ -38,7 +41,7 @@ These are static videos whose average length are about 3~5 minutes.
 You can see an example video with the below line:
 
 ```
-wget https://github.com/yerfor/GeneFace/releases/download/v1.1.0/May.zip
+wget https://github.com/YudongGuo/AD-NeRF/blob/master/dataset/vids/Obama.mp4?raw=true -O data/obama/obama.mp4
 ```
 
 We also used [SynObama](https://grail.cs.washington.edu/projects/AudioToObama/) for cross-driven setting inference.
@@ -46,7 +49,13 @@ We also used [SynObama](https://grail.cs.washington.edu/projects/AudioToObama/) 
 
 ## Data Preparation
 
-[Basel Face Model 2009](https://faces.dmi.unibas.ch/bfm/main.php?nav=1-1-0&id=details) 
+- prepare face-parsing model.
+
+```bash
+wget https://github.com/YudongGuo/AD-NeRF/blob/master/data_util/face_parsing/79999_iter.pth?raw=true -O data_utils/face_parsing/79999_iter.pth
+```
+
+- Download 3DMM model from [Basel Face Model 2009](https://faces.dmi.unibas.ch/bfm/main.php?nav=1-1-0&id=details) 
 
 Put "01_MorphableModel.mat" to data_utils/face_tracking/3DMM/ 
     
@@ -56,6 +65,11 @@ python convert_BFM.py
 cd ../../
 python data_utils/process.py ${YOUR_DATASET_DIR}/${DATASET_NAME}/${DATASET_NAME}.mp4 
 ```
+
+- Obtain AU45 for eyes blinking
+  
+Run `FeatureExtraction` in [OpenFace](https://github.com/TadasBaltrusaitis/OpenFace), rename and move the output CSV file to `(your dataset dir)/(dataset name)/au.csv`.
+
 
 ```
 ├── (your dataset dir)

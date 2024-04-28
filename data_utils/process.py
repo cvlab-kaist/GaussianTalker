@@ -49,6 +49,8 @@ def extract_audio_features(path, mode='wav2vec'):
     else: # deepspeech
         cmd = f'python data_utils/deepspeech_features/extract_ds_features.py --input {path}'
     os.system(cmd)
+    import shutil
+    shutil.copy(path.replace('.wav', '.npy'), path.replace('.wav', '_ds.npy'))
     print(f'[INFO] ===== extracted audio labels =====')
 
 
