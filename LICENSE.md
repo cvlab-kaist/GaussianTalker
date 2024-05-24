@@ -1,83 +1,142 @@
-Gaussian-Splatting License  
-===========================  
+# GaussianTalker: Real-Time High-Fidelity Talking Head Synthesis with Audio-Driven 3D Gaussian Splatting
+<a href="https://arxiv.org/abs/2404.16012v2"><img src="https://img.shields.io/badge/arXiv-2404.16012v2-%23B31B1B"></a>
+<a href="https://ku-cvlab.github.io/GaussianTalker"><img src="https://img.shields.io/badge/Project%20Page-online-brightgreen"></a>
+<br>
 
-**Inria** and **the Max Planck Institut for Informatik (MPII)** hold all the ownership rights on the *Software* named **gaussian-splatting**.  
-The *Software* is in the process of being registered with the Agence pour la Protection des  
-Programmes (APP).  
+This is our official implementation of the paper 
 
-The *Software* is still being developed by the *Licensor*.  
+"GaussianTalker: Real-Time High-Fidelity Talking Head Synthesis with Audio-Driven 3D Gaussian Splatting"
 
-*Licensor*'s goal is to allow the research community to use, test and evaluate  
-the *Software*.  
-
-## 1.  Definitions  
-
-*Licensee* means any person or entity that uses the *Software* and distributes  
-its *Work*.  
-
-*Licensor* means the owners of the *Software*, i.e Inria and MPII  
-
-*Software* means the original work of authorship made available under this  
-License ie gaussian-splatting.  
-
-*Work* means the *Software* and any additions to or derivative works of the  
-*Software* that are made available under this License.  
+by [Kyusun Cho](https://github.com/kyustorm7)\*, [Joungbin Lee](https://github.com/joungbinlee)\*, [Heeji Yoon](https://github.com/yoon-heez)\*, [Yeobin Hong](https://github.com/yeobinhong), [Jaehoon Ko](https://github.com/mlnyang), Sangjun Ahn, [Seungryong Kim](https://cvlab.korea.ac.kr)<sup>&dagger;</sup>
 
 
-## 2.  Purpose  
-This license is intended to define the rights granted to the *Licensee* by  
-Licensors under the *Software*.  
+## Introduction
+![image](./docs/structure.png)
+<!-- <br> -->
 
-## 3.  Rights granted  
+For more information, please check out our [Paper](https://arxiv.org/abs/2404.16012v2) and our [Project page](https://ku-cvlab.github.io/GaussianTalker/).
 
-For the above reasons Licensors have decided to distribute the *Software*.  
-Licensors grant non-exclusive rights to use the *Software* for research purposes  
-to research users (both academic and industrial), free of charge, without right  
-to sublicense.. The *Software* may be used "non-commercially", i.e., for research  
-and/or evaluation purposes only.  
+## Installation
+We implemented & tested **GaussianTalker** with NVIDIA RTX 3090 and A6000 GPU.
 
-Subject to the terms and conditions of this License, you are granted a  
-non-exclusive, royalty-free, license to reproduce, prepare derivative works of,  
-publicly display, publicly perform and distribute its *Work* and any resulting  
-derivative works in any form.  
+Run the below codes for the environment setting. ( details are in requirements.txt )
+```bash
+git clone https://github.com/joungbinlee/GaussianTalker.git
+cd GaussianTalker
+git submodule update --init --recursive
+conda create -n GaussianTalker python=3.7 
+conda activate GaussianTalker
 
-## 4.  Limitations  
+pip install -r requirements.txt
+pip install -e submodules/custom-bg-depth-diff-gaussian-rasterization
+pip install -e submodules/simple-knn
+pip install "git+https://github.com/facebookresearch/pytorch3d.git"
+pip install tensorflow-gpu==2.8.0
+pip install --upgrade "protobuf<=3.20.1"
+```
 
-**4.1 Redistribution.** You may reproduce or distribute the *Work* only if (a) you do  
-so under this License, (b) you include a complete copy of this License with  
-your distribution, and (c) you retain without modification any copyright,  
-patent, trademark, or attribution notices that are present in the *Work*.  
 
-**4.2 Derivative Works.** You may specify that additional or different terms apply  
-to the use, reproduction, and distribution of your derivative works of the *Work*  
-("Your Terms") only if (a) Your Terms provide that the use limitation in  
-Section 2 applies to your derivative works, and (b) you identify the specific  
-derivative works that are subject to Your Terms. Notwithstanding Your Terms,  
-this License (including the redistribution requirements in Section 3.1) will  
-continue to apply to the *Work* itself.  
+## Download Dataset
 
-**4.3** Any other use without of prior consent of Licensors is prohibited. Research  
-users explicitly acknowledge having received from Licensors all information  
-allowing to appreciate the adequacy between of the *Software* and their needs and  
-to undertake all necessary precautions for its execution and use.  
+We used talking portrait videos from [AD-NeRF](https://github.com/YudongGuo/AD-NeRF), [GeneFace](https://github.com/yerfor/GeneFace) and [HDTF dataset](https://github.com/MRzzm/HDTF). 
+These are static videos whose average length are about 3~5 minutes.
 
-**4.4** The *Software* is provided both as a compiled library file and as source  
-code. In case of using the *Software* for a publication or other results obtained  
-through the use of the *Software*, users are strongly encouraged to cite the  
-corresponding publications as explained in the documentation of the *Software*.  
+You can see an example video with the below line:
 
-## 5.  Disclaimer  
+```
+wget https://github.com/YudongGuo/AD-NeRF/blob/master/dataset/vids/Obama.mp4?raw=true -O data/obama/obama.mp4
+```
 
-THE USER CANNOT USE, EXPLOIT OR DISTRIBUTE THE *SOFTWARE* FOR COMMERCIAL PURPOSES  
-WITHOUT PRIOR AND EXPLICIT CONSENT OF LICENSORS. YOU MUST CONTACT INRIA FOR ANY  
-UNAUTHORIZED USE: stip-sophia.transfert@inria.fr . ANY SUCH ACTION WILL  
-CONSTITUTE A FORGERY. THIS *SOFTWARE* IS PROVIDED "AS IS" WITHOUT ANY WARRANTIES  
-OF ANY NATURE AND ANY EXPRESS OR IMPLIED WARRANTIES, WITH REGARDS TO COMMERCIAL  
-USE, PROFESSIONAL USE, LEGAL OR NOT, OR OTHER, OR COMMERCIALISATION OR  
-ADAPTATION. UNLESS EXPLICITLY PROVIDED BY LAW, IN NO EVENT, SHALL INRIA OR THE  
-AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR  
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE  
-GOODS OR SERVICES, LOSS OF USE, DATA, OR PROFITS OR BUSINESS INTERRUPTION)  
-HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT  
-LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING FROM, OUT OF OR  
-IN CONNECTION WITH THE *SOFTWARE* OR THE USE OR OTHER DEALINGS IN THE *SOFTWARE*.  
+We also used [SynObama](https://grail.cs.washington.edu/projects/AudioToObama/) for cross-driven setting inference.
+
+
+## Data Preparation
+
+- prepare face-parsing model.
+
+```bash
+wget https://github.com/YudongGuo/AD-NeRF/blob/master/data_util/face_parsing/79999_iter.pth?raw=true -O data_utils/face_parsing/79999_iter.pth
+```
+
+- Download 3DMM model from [Basel Face Model 2009](https://faces.dmi.unibas.ch/bfm/main.php?nav=1-1-0&id=details) 
+
+Put "01_MorphableModel.mat" to data_utils/face_tracking/3DMM/ 
+    
+```bash
+cd data_utils/face_tracking
+python convert_BFM.py
+cd ../../
+python data_utils/process.py ${YOUR_DATASET_DIR}/${DATASET_NAME}/${DATASET_NAME}.mp4 
+```
+
+- Obtain AU45 for eyes blinking
+  
+Run `FeatureExtraction` in [OpenFace](https://github.com/TadasBaltrusaitis/OpenFace), rename and move the output CSV file to `(your dataset dir)/(dataset name)/au.csv`.
+
+
+```
+├── (your dataset dir)
+│   | (dataset name)
+│       ├── gt_imgs
+│           ├── 0.jpg
+│           ├── 1.jgp
+│           ├── 2.jgp
+│           ├── ...
+│       ├── ori_imgs
+│           ├── 0.jpg
+│           ├── 0.lms
+│           ├── 1.jgp
+│           ├── 1.lms
+│           ├── ...
+│       ├── parsing
+│           ├── 0.png
+│           ├── 1.png
+│           ├── 2.png
+│           ├── 3.png
+│           ├── ...
+│       ├── torso_imgs
+│           ├── 0.png
+│           ├── 1.png
+│           ├── 2.png
+│           ├── 3.png
+│           ├── ...
+│       ├── au.csv
+│       ├── aud_ds.npy
+│       ├── aud_novel.wav
+│       ├── aud_train.wav
+│       ├── aud.wav
+│       ├── bc.jpg
+│       ├── (dataset name).mp4
+│       ├── track_params.pt
+│       ├── transforms_train.json
+│       ├── transforms_val.json
+```
+
+## Training
+
+
+```bash
+python train.py -s ${YOUR_DATASET_DIR}/${DATASET_NAME} --model_path ${YOUR_MODEL_DIR} --configs arguments/64_dim_1_transformer.py 
+```
+
+
+## Rendering
+
+Please adjust the batch size to match your GPU settings.
+
+```bash
+python render.py -s ${YOUR_DATASET_DIR}/${DATASET_NAME} --model_path ${YOUR_MODEL_DIR} --configs arguments/64_dim_1_transformer.py --iteration 10000 --batch 128
+```
+    
+## Citation
+If you find our work useful in your research, please cite our work as:
+```
+@misc{cho2024gaussiantalker,
+      title={GaussianTalker: Real-Time High-Fidelity Talking Head Synthesis with Audio-Driven 3D Gaussian Splatting}, 
+      author={Kyusun Cho and Joungbin Lee and Heeji Yoon and Yeobin Hong and Jaehoon Ko and Sangjun Ahn and Seungryong Kim},
+      year={2024},
+      eprint={2404.16012},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
