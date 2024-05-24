@@ -7,6 +7,9 @@ This is our official implementation of the paper
 
 "GaussianTalker: Real-Time High-Fidelity Talking Head Synthesis with Audio-Driven 3D Gaussian Splatting"
 
+by [Kyusun Cho](https://github.com/kyustorm7)\*, [Joungbin Lee](https://github.com/joungbinlee)\*, [Heeji Yoon](https://github.com/yoon-heez)\*, [Yeobin Hong](https://github.com/yeobinhong), [Jaehoon Ko](https://github.com/mlnyang), Sangjun Ahn, [Seungryong Kim](https://cvlab.korea.ac.kr)<sup>&dagger;</sup>
+
+
 ## Introduction
 ![image](./docs/structure.png)
 <!-- <br> -->
@@ -125,3 +128,15 @@ Please adjust the batch size to match your GPU settings.
 python render.py -s ${YOUR_DATASET_DIR}/${DATASET_NAME} --model_path ${YOUR_MODEL_DIR} --configs arguments/64_dim_1_transformer.py --iteration 10000 --batch 128
 ```
     
+## Citation
+If you find our work useful in your research, please cite our work as:
+```
+@misc{cho2024gaussiantalker,
+      title={GaussianTalker: Real-Time High-Fidelity Talking Head Synthesis with Audio-Driven 3D Gaussian Splatting}, 
+      author={Kyusun Cho and Joungbin Lee and Heeji Yoon and Yeobin Hong and Jaehoon Ko and Sangjun Ahn and Seungryong Kim},
+      year={2024},
+      eprint={2404.16012},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
