@@ -128,6 +128,14 @@ Please adjust the batch size to match your GPU settings.
 python render.py -s ${YOUR_DATASET_DIR}/${DATASET_NAME} --model_path ${YOUR_MODEL_DIR} --configs arguments/64_dim_1_transformer.py --iteration 10000 --batch 128
 ```
     
+## Inference with custom audio
+
+Please locate the files <custom_aud>.wav and <custom_aud>.npy in the following directory path: ${YOUR_DATASET_DIR}/${DATASET_NAME}.
+
+```bash
+python render.py -s ${YOUR_DATASET_DIR}/${DATASET_NAME} --model_path ${YOUR_MODEL_DIR} --configs arguments/64_dim_1_transformer.py --iteration 10000 --batch 128 --custom_aud <custom_aud>.npy --custom_wav <custom_aud>.wav --skip_train --skip_test
+```
+
 ## Citation
 If you find our work useful in your research, please cite our work as:
 ```

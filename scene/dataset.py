@@ -23,7 +23,8 @@ class FourDGSdataset(Dataset):
         self,
         dataset,
         args,
-        dataset_type
+        dataset_type,
+        aud=None
     ):
         self.dataset = dataset
         self.args = args

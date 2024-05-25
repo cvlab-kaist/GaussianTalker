@@ -51,7 +51,8 @@ def render_set(model_path, name, iteration, scene, gaussians, pipeline,audio_dir
     inf_audio_dir = audio_dir
     
     makedirs(render_path, exist_ok=True)
-    makedirs(gts_path, exist_ok=True)
+    if name != 'custom':
+        makedirs(gts_path, exist_ok=True)
     
     viewpoint_stack = scene
     viewpoint_stack_loader = DataLoader(viewpoint_stack, batch_size=batch_size,shuffle=False,num_workers=32,collate_fn=list)
@@ -122,15 +123,17 @@ def render_set(model_path, name, iteration, scene, gaussians, pipeline,audio_dir
     cam_tensor = torch.cat(cam_attention,0)[:process_until]
     null_tensor = torch.cat(null_attention,0)[:process_until]
     
-    write_frames_to_video(tensor_to_image(gt_image_tensor),gts_path+f'/gt', use_imageio = True)
+    if name != 'custom':
+        write_frames_to_video(tensor_to_image(gt_image_tensor),gts_path+f'/gt', use_imageio = True)
     write_frames_to_video(tensor_to_image(image_tensor),render_path+'/renders', use_imageio = True)
     write_frames_to_video(tensor_to_image(audio_tensor),render_path+'/audio', use_imageio = False)
     write_frames_to_video(tensor_to_image(eye_tensor),render_path+'/eye', use_imageio = False)
     write_frames_to_video(tensor_to_image(null_tensor),render_path+'/null', use_imageio = False)
     write_frames_to_video(tensor_to_image(cam_tensor),render_path+'/cam', use_imageio = False)
 
-    cmd = f'ffmpeg -loglevel quiet -y -i {render_path}/renders.mp4 -i {inf_audio_dir} -c:v copy -c:a aac {render_path}/{model_path.split("/")[-2]}_{name}_{iteration}iter_renders.mov'
-    os.system(cmd)
+    if name != 'custom':
+        cmd = f'ffmpeg -loglevel quiet -y -i {render_path}/renders.mp4 -i {inf_audio_dir} -c:v copy -c:a aac {render_path}/{model_path.split("/")[-2]}_{name}_{iteration}iter_renders.mov'
+        os.system(cmd)
     cmd = f'ffmpeg -loglevel quiet -y -i {gts_path}/gt.mp4 -i {inf_audio_dir} -c:v copy -c:a aac {gts_path}/{model_path.split("/")[-2]}_{name}_{iteration}iter_gt.mov'
     os.system(cmd)
     cmd = f'ffmpeg -loglevel quiet -y -i {render_path}/audio.mp4 -i {inf_audio_dir} -c:v copy -c:a aac {render_path}/{model_path.split("/")[-2]}_{name}_{iteration}iter_audio.mov'
@@ -142,20 +145,29 @@ def render_set(model_path, name, iteration, scene, gaussians, pipeline,audio_dir
     cmd = f'ffmpeg -loglevel quiet -y -i {render_path}/cam.mp4 -i {inf_audio_dir} -c:v copy -c:a aac {render_path}/{model_path.split("/")[-2]}_{name}_{iteration}iter_cam.mov'
     os.system(cmd)
     
+    if name != 'custom':
+        os.remove(f"{gts_path}/gt.mp4")
     os.remove(f"{render_path}/renders.mp4")
-    os.remove(f"{gts_path}/gt.mp4")
+
     os.remove(f"{render_path}/audio.mp4")
     os.remove(f"{render_path}/eye.mp4")
     os.remove(f"{render_path}/null.mp4")
     os.remove(f"{render_path}/cam.mp4")
     
-def render_sets(dataset : ModelParams, hyperparam, iteration : int, pipeline : PipelineParams, skip_train : bool, skip_test : bool, skip_video: bool, batch_size):
+def render_sets(dataset : ModelParams, hyperparam, iteration : int, pipeline : PipelineParams, args):
+    skip_train, skip_test, skip_video, batch_size= args.skip_train, args.skip_test, args.skip_video, args.batch
+    
     with torch.no_grad():
         data_dir = dataset.source_path
         gaussians = GaussianModel(dataset.sh_degree, hyperparam)
-        scene = Scene(dataset, gaussians, load_iteration=iteration, shuffle=False)
+        scene = Scene(dataset, gaussians, load_iteration=iteration, shuffle=False, custom_aud=args.custom_aud)
         
         gaussians.eval()
+        
+        if args.custom_aud != '':
+            audio_dir = os.path.join(data_dir, args.custom_wav)
+            render_set(dataset.model_path, "custom", scene.loaded_iter, scene.getCustomCameras(), gaussians, pipeline, audio_dir, batch_size)
+        
         if not skip_train:
             audio_dir = os.path.join(data_dir, "aud_train.wav")
             render_set(dataset.model_path, "train", scene.loaded_iter, scene.getTrainCameras(), gaussians, pipeline, audio_dir, batch_size)
@@ -205,6 +217,8 @@ if __name__ == "__main__":
     parser.add_argument("--skip_video", action="store_true")
     parser.add_argument("--configs", type=str)
     parser.add_argument("--batch", type=int, required=True)
+    parser.add_argument("--custom_aud", type=str, default='')
+    parser.add_argument("--custom_wav", type=str, default='')
     # parser.add_argument("--audio_dir", type=str)
     args = get_combined_args(parser)
     print("Rendering " , args.model_path)
@@ -217,4 +231,4 @@ if __name__ == "__main__":
     safe_state(args.quiet)
     args.only_infer = True
     print(args)
-    render_sets(model.extract(args), hyperparam.extract(args), args.iteration, pipeline.extract(args), args.skip_train, args.skip_test, args.skip_video, args.batch)
+    render_sets(model.extract(args), hyperparam.extract(args), args.iteration, pipeline.extract(args), args)

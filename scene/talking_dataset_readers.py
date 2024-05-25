@@ -66,6 +66,7 @@ class SceneInfo(NamedTuple):
     train_cameras: list
     test_cameras: list
     video_cameras: list
+    custom_cameras: list
     nerf_normalization: dict
     ply_path: str
     maxtime: int
@@ -202,7 +203,8 @@ def euler2rot(euler_angle):
     ), 2)
     return torch.bmm(rot_x, torch.bmm(rot_y, rot_z))
 
-def readCamerasFromTracksTransforms(path, meshfile, transformsfile, aud_features, eye_features, extension=".jpg", mapper = {}, preload=False):
+def readCamerasFromTracksTransforms(path, meshfile, transformsfile, aud_features, eye_features, 
+                                    extension=".jpg", mapper = {}, preload=False, custom_aud =None):
     cam_infos = []
     mesh_path = os.path.join(path, meshfile)
     track_params = torch.load(mesh_path)
@@ -232,10 +234,12 @@ def readCamerasFromTracksTransforms(path, meshfile, transformsfile, aud_features
     bg_img = cv2.cvtColor(bg_img, cv2.COLOR_BGR2RGB)
     bg_img = torch.from_numpy(bg_img).permute(2,0,1).float() / 255.0
         
-    auds = [aud_features[min(frame['aud_id'], aud_features.shape[0] - 1)] for frame in frames]
-    auds = torch.stack(auds, dim=0)
+    if custom_aud:
+        auds = aud_features
+    else:    
+        auds = [aud_features[min(frame['aud_id'], aud_features.shape[0] - 1)] for frame in frames]
+        auds = torch.stack(auds, dim=0)
         
-
     for idx, frame in enumerate(frames): # len(frames): 7272
         
         cam_name = os.path.join(f_path, str(frame["img_id"]) + extension)
@@ -336,7 +340,7 @@ def readCamerasFromTracksTransforms(path, meshfile, transformsfile, aud_features
 
 
 
-def readTalkingPortraitDatasetInfo(path, white_background, eval, extension=".jpg"):
+def readTalkingPortraitDatasetInfo(path, white_background, eval, extension=".jpg",custom_aud=None):
     # Audio Information
     aud_features = np.load(os.path.join(path, 'aud_ds.npy'))
     aud_features = torch.from_numpy(aud_features)
@@ -366,6 +370,19 @@ def readTalkingPortraitDatasetInfo(path, white_background, eval, extension=".jpg
     test_cam_infos = readCamerasFromTracksTransforms(path, "track_params.pt", "transforms_val.json", aud_features, eye_features, extension, timestamp_mapper)
     print("Generating Video Transforms")
     video_cam_infos = None 
+
+    if custom_aud:
+        aud_features = np.load(os.path.join(path, custom_aud))
+        aud_features = torch.from_numpy(aud_features)
+        if len(aud_features.shape) == 3:
+            aud_features = aud_features.float().permute(0, 2, 1) # [N, 16, 29] --> [N, 29, 16]    
+        else:
+            raise NotImplementedError(f'[ERROR] aud_features.shape {aud_features.shape} not supported')
+        print("Reading Custom Transforms")
+        custom_cam_infos = readCamerasFromTracksTransforms(path, "track_params.pt", "transforms_val.json", aud_features, eye_features, extension, 
+                                                           timestamp_mapper,custom_aud=custom_aud)
+    else:
+        custom_cam_infos=None
     if not eval:
         train_cam_infos.extend(test_cam_infos)
         test_cam_infos = []
@@ -397,6 +414,7 @@ def readTalkingPortraitDatasetInfo(path, white_background, eval, extension=".jpg
                            train_cameras=train_cam_infos,
                            test_cameras=test_cam_infos,
                            video_cameras=video_cam_infos,
+                           custom_cameras=custom_cam_infos,
                            nerf_normalization=nerf_normalization,
                            ply_path=ply_path,
                            maxtime=max_time
