@@ -132,9 +132,9 @@ def render_set(model_path, name, iteration, scene, gaussians, pipeline,audio_dir
     write_frames_to_video(tensor_to_image(cam_tensor),render_path+'/cam', use_imageio = False)
 
     if name != 'custom':
-        cmd = f'ffmpeg -loglevel quiet -y -i {render_path}/renders.mp4 -i {inf_audio_dir} -c:v copy -c:a aac {render_path}/{model_path.split("/")[-2]}_{name}_{iteration}iter_renders.mov'
+        cmd = f'ffmpeg -loglevel quiet -y -i {gts_path}/gt.mp4 -i {inf_audio_dir} -c:v copy -c:a aac {gts_path}/{model_path.split("/")[-2]}_{name}_{iteration}iter_gt.mov'
         os.system(cmd)
-    cmd = f'ffmpeg -loglevel quiet -y -i {gts_path}/gt.mp4 -i {inf_audio_dir} -c:v copy -c:a aac {gts_path}/{model_path.split("/")[-2]}_{name}_{iteration}iter_gt.mov'
+    cmd = f'ffmpeg -loglevel quiet -y -i {render_path}/renders.mp4 -i {inf_audio_dir} -c:v copy -c:a aac {render_path}/{model_path.split("/")[-2]}_{name}_{iteration}iter_renders.mov'
     os.system(cmd)
     cmd = f'ffmpeg -loglevel quiet -y -i {render_path}/audio.mp4 -i {inf_audio_dir} -c:v copy -c:a aac {render_path}/{model_path.split("/")[-2]}_{name}_{iteration}iter_audio.mov'
     os.system(cmd)
@@ -148,7 +148,6 @@ def render_set(model_path, name, iteration, scene, gaussians, pipeline,audio_dir
     if name != 'custom':
         os.remove(f"{gts_path}/gt.mp4")
     os.remove(f"{render_path}/renders.mp4")
-
     os.remove(f"{render_path}/audio.mp4")
     os.remove(f"{render_path}/eye.mp4")
     os.remove(f"{render_path}/null.mp4")
