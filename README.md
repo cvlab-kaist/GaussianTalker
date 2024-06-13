@@ -9,6 +9,9 @@ This is our official implementation of the paper
 
 by [Kyusun Cho](https://github.com/kyustorm7)\*, [Joungbin Lee](https://github.com/joungbinlee)\*, [Heeji Yoon](https://github.com/yoon-heez)\*, [Yeobin Hong](https://github.com/yeobinhong), [Jaehoon Ko](https://github.com/mlnyang), Sangjun Ahn, [Seungryong Kim](https://cvlab.korea.ac.kr)<sup>&dagger;</sup>
 
+## ⚡️News
+**❗️2024.06.13:** We also generated the torso in the same space as the face using Gaussian splatting. **After cloning the torso branch**, you can train and render it in the same way to use it.
+
 
 ## Introduction
 ![image](./docs/structure.png)
