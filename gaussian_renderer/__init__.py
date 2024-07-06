@@ -19,6 +19,7 @@ from time import time
 def render_from_batch(viewpoint_cameras, pc : GaussianModel, pipe, random_color= False, scaling_modifier = 1.0, stage="fine", batch_size=1, visualize_attention=False, only_infer = False, canonical_tri_plane_factor_list = None, iteration=None):
     if only_infer:
         time1 = time()
+        batch_size = len(viewpoint_cameras)
     means3D = pc.get_xyz.unsqueeze(0).repeat(batch_size, 1, 1) # [B, N, 3]
     opacity = pc._opacity.unsqueeze(0).repeat(batch_size, 1, 1) # [B, N, 1]
     shs = pc.get_features.unsqueeze(0).repeat(batch_size, 1, 1, 1) # [B, N, 16, 3]
