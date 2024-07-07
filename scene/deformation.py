@@ -145,12 +145,12 @@ class Deformation(nn.Module):
     
     def attention_query_audio_batch(self, rays_pts_emb, scales_emb, rotations_emb, audio_features, eye_features, cam_features):
         # audio_features [B, 8, 29, 16]) 
-        B, N, _= rays_pts_emb.shape
+        B, _, _, _= audio_features.shape
         
         if self.only_infer: #cashing
             if self.enc_x == None:
                 self.enc_x = self.tri_plane(rays_pts_emb,only_feature = True, train_tri_plane = self.args.train_tri_plane)
-            enc_x = self.enc_x
+            enc_x = self.enc_x[:B]
         
         else:
             # audio_features [B, 8, 29, 16]) 
@@ -171,7 +171,6 @@ class Deformation(nn.Module):
             enc_eye = self.eye_mlp(enc_eye) # B, 1, dim
         
         enc_source = torch.cat([enc_a,enc_eye, enc_cam, self.null_vector.repeat(B,1,1)],dim = 1) # B, 3, dim
-        
         x, attention = self.transformer(enc_x, enc_source)
         return x, attention
     
@@ -274,6 +273,7 @@ class Deformation(nn.Module):
     
     def forward_dynamic_batch(self,rays_pts_emb, scales_emb, rotations_emb, opacity_emb, shs_emb, audio_features, eye_features, cam_features):
         hidden, attention = self.attention_query_audio_batch(rays_pts_emb, scales_emb, rotations_emb, audio_features, eye_features, cam_features)
+        B, _, _, _ = audio_features.shape
         if self.args.static_mlp:
             mask = self.static_mlp(hidden)
         elif self.args.empty_voxel:
@@ -285,7 +285,7 @@ class Deformation(nn.Module):
         else:
             dx = self.pos_deform(hidden)
             pts = torch.zeros_like(rays_pts_emb[:,:,:3])
-            pts = rays_pts_emb[:,:,:3]*mask + dx
+            pts = rays_pts_emb[:B,:,:3]*mask + dx
         if self.args.no_ds :
             
             scales = scales_emb[:,:,:3]
@@ -293,7 +293,7 @@ class Deformation(nn.Module):
             ds = self.scales_deform(hidden)
 
             scales = torch.zeros_like(scales_emb[:,:,:3])
-            scales = scales_emb[:,:,:3]*mask + ds
+            scales = scales_emb[:B,:,:3]*mask + ds
             
         if self.args.no_dr :
             rotations = rotations_emb[:,:,:4]
@@ -304,7 +304,7 @@ class Deformation(nn.Module):
             if self.args.apply_rotation:
                 rotations = batch_quaternion_multiply(rotations_emb, dr)
             else:
-                rotations = rotations_emb[:,:,:4] + dr
+                rotations = rotations_emb[:B,:,:4] + dr
 
         if self.args.no_do :
             opacity = opacity_emb[:,:,:1] 
@@ -312,14 +312,14 @@ class Deformation(nn.Module):
             do = self.opacity_deform(hidden) 
           
             opacity = torch.zeros_like(opacity_emb[:,:,:1])
-            opacity = opacity_emb[:,:,:1]*mask + do
+            opacity = opacity_emb[:B,:,:1]*mask + do
         if self.args.no_dshs:
             shs = shs_emb
         else:
             dshs = self.shs_deform(hidden).reshape([shs_emb.shape[0],shs_emb.shape[1],16,3])
 
             shs = torch.zeros_like(shs_emb)
-            shs = shs_emb*mask.unsqueeze(-1) + dshs
+            shs = shs_emb[:B]*mask.unsqueeze(-1) + dshs
         
         return pts, scales, rotations, opacity, shs, attention
     
@@ -384,7 +384,7 @@ class deform_network(nn.Module):
             point_emb = self.point_emb
             scales_emb = self.scales_emb
             rotations_emb = self.rotations_emb
-            
+
             means3D, scales, rotations, opacity, shs, attention = self.deformation_net(point_emb,
                                                     scales_emb,
                                                     rotations_emb,
