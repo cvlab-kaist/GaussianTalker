@@ -1,4 +1,4 @@
-# GaussianTalker: Real-Time High-Fidelity Talking Head Synthesis with Audio-Driven 3D Gaussian Splatting
+# GaussianTalker: Real-Time High-Fidelity Talking Head Synthesis with Audio-Driven 3D Gaussian Splatting (ACM MM 2024)
 <a href="https://arxiv.org/abs/2404.16012v2"><img src="https://img.shields.io/badge/arXiv-2404.16012v2-%23B31B1B"></a>
 <a href="https://ku-cvlab.github.io/GaussianTalker"><img src="https://img.shields.io/badge/Project%20Page-online-brightgreen"></a>
 <br>
