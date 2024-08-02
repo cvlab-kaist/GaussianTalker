@@ -85,10 +85,12 @@ def render_set(model_path, name, iteration, scene, gaussians, pipeline,audio_dir
     for idx in tqdm(range(iterations), desc="Rendering progress",total = iterations):
 
         viewpoint_cams = next(loader)
-        output = render_from_batch(viewpoint_cams, gaussians, pipeline, 
+        try:
+            output = render_from_batch(viewpoint_cams, gaussians, pipeline, 
                                 random_color= False, stage='fine',
                                 batch_size=batch_size, visualize_attention=False, only_infer=True)
-
+        except:
+            break
         total_time += output["inference_time"]
         image.append(output["rendered_image_tensor"].cpu())
         gt.append(output["gt_tensor"].cpu())
@@ -105,10 +107,12 @@ def render_set(model_path, name, iteration, scene, gaussians, pipeline,audio_dir
     for idx in range(iterations):
 
         viewpoint_cams = next(loader)
-        output = render_from_batch(viewpoint_cams, gaussians, pipeline, 
+        try:
+            output = render_from_batch(viewpoint_cams, gaussians, pipeline, 
                                 random_color= False, stage='fine',
                                 batch_size=batch_size, visualize_attention=True, only_infer=True) 
- 
+        except:
+            break
         total_time += output["inference_time"]
         audio_attention.append(output["audio_attention"].cpu())
         eye_attention.append(output["eye_attention"].cpu())
