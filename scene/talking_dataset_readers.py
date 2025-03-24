@@ -357,7 +357,7 @@ def readTalkingPortraitDatasetInfo(path, white_background, eval, extension=".jpg
     # load action units
     import pandas as pd
     au_blink_info=pd.read_csv(os.path.join(path, 'au.csv'))
-    eye_features = au_blink_info[' AU45_r'].values
+    eye_features = au_blink_info['AU45_r'].values
     
     
     ply_path = os.path.join(path, "fused.ply")
