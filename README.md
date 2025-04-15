@@ -142,12 +142,11 @@ python render.py -s ${YOUR_DATASET_DIR}/${DATASET_NAME} --model_path ${YOUR_MODE
 ## Citation
 If you find our work useful in your research, please cite our work as:
 ```
-@misc{cho2024gaussiantalker,
-      title={GaussianTalker: Real-Time High-Fidelity Talking Head Synthesis with Audio-Driven 3D Gaussian Splatting}, 
-      author={Kyusun Cho and Joungbin Lee and Heeji Yoon and Yeobin Hong and Jaehoon Ko and Sangjun Ahn and Seungryong Kim},
-      year={2024},
-      eprint={2404.16012},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+@inproceedings{cho2024gaussiantalker,
+  title={Gaussiantalker: Real-time talking head synthesis with 3d gaussian splatting},
+  author={Cho, Kyusun and Lee, Joungbin and Yoon, Heeji and Hong, Yeobin and Ko, Jaehoon and Ahn, Sangjun and Kim, Seungryong},
+  booktitle={Proceedings of the 32nd ACM International Conference on Multimedia},
+  pages={10985--10994},
+  year={2024}
 }
 ```
