@@ -236,6 +236,7 @@ def readCamerasFromTracksTransforms(path, meshfile, transformsfile, aud_features
         
     if custom_aud:
         auds = aud_features
+        frames = frames[:aud_features.shape[0]]
     else:    
         auds = [aud_features[min(frame['aud_id'], aud_features.shape[0] - 1)] for frame in frames]
         auds = torch.stack(auds, dim=0)
@@ -379,8 +380,9 @@ def readTalkingPortraitDatasetInfo(path, white_background, eval, extension=".jpg
         else:
             raise NotImplementedError(f'[ERROR] aud_features.shape {aud_features.shape} not supported')
         print("Reading Custom Transforms")
-        custom_cam_infos = readCamerasFromTracksTransforms(path, "track_params.pt", "transforms_val.json", aud_features, eye_features, extension, 
+        custom_cam_infos = readCamerasFromTracksTransforms(path, "track_params.pt", "transforms_train.json", aud_features, eye_features, extension, 
                                                            timestamp_mapper,custom_aud=custom_aud)
+        print(f"Custom Cameras: {len(custom_cam_infos)}")
     else:
         custom_cam_infos=None
     if not eval:
